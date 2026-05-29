@@ -1,0 +1,195 @@
+{
+    "mcpTranslationVersion": "0.1",
+    "target": {
+        "ordId": "sap.s4.util:apiResource:Conversation:v1",
+        "type": "openapi-v3"
+    },
+    "serverInfo": {
+        "name": "sap.mcp/conversation_service",
+        "title": "conversation_service",
+        "version": "1.0.0",
+        "description": "MCP server for the conversation_service service."
+    },
+    "tools": [
+        {
+            "name": "POST_askAgent",
+            "title": "POST_askAgent",
+            "description": "This is the conversation endpoint for the AI agent. A session must be created before sending any messages. See createSession.",
+            "openApiType": {
+                "path": "/askAgent",
+                "method": "post",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "description": "Action parameters"
+                    },
+                    {
+                        "name": "ucssa-userid",
+                        "description": "The user ID of the requesting user",
+                        "in": "header",
+                        "newParameterName": "ucssa_userid"
+                    },
+                    {
+                        "name": "ucssa-username",
+                        "description": "The username of the requesting user",
+                        "in": "header",
+                        "newParameterName": "ucssa_username"
+                    },
+                    {
+                        "name": "ucssa-bps",
+                        "description": "JSON array of business partner IDs, e.g. [\"1113855\"]",
+                        "in": "header",
+                        "newParameterName": "ucssa_bps"
+                    }
+                ],
+                "requestBody": {
+                    "contentType": "application/json"
+                }
+            }
+        },
+        {
+            "name": "POST_createSession",
+            "title": "POST_createSession",
+            "description": "Creates a new conversation session and returns its unique ID, which must be used with all subsequent conversation requests to maintain context.",
+            "openApiType": {
+                "path": "/createSession",
+                "method": "post",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "description": ""
+                    },
+                    {
+                        "name": "ucssa-userid",
+                        "description": "The user ID of the requesting user",
+                        "in": "header",
+                        "newParameterName": "ucssa_userid"
+                    },
+                    {
+                        "name": "ucssa-username",
+                        "description": "The username of the requesting user",
+                        "in": "header",
+                        "newParameterName": "ucssa_username"
+                    },
+                    {
+                        "name": "ucssa-bps",
+                        "description": "JSON array of business partner IDs, e.g. [\"1113855\"]",
+                        "in": "header",
+                        "newParameterName": "ucssa_bps"
+                    }
+                ],
+                "requestBody": {
+                    "contentType": "application/json"
+                }
+            }
+        },
+        {
+            "name": "GET_getSessionLanguage",
+            "title": "GET_getSessionLanguage",
+            "description": "Retrieves the language setting for the specified chat session.",
+            "openApiType": {
+                "path": "/getSessionLanguage",
+                "method": "get",
+                "parameters": [
+                    {
+                        "name": "ucssa-userid",
+                        "description": "The user ID of the requesting user",
+                        "in": "header",
+                        "newParameterName": "ucssa_userid"
+                    },
+                    {
+                        "name": "ucssa-username",
+                        "description": "The username of the requesting user",
+                        "in": "header",
+                        "newParameterName": "ucssa_username"
+                    },
+                    {
+                        "name": "ucssa-bps",
+                        "description": "JSON array of business partner IDs, e.g. [\"1113855\"]",
+                        "in": "header",
+                        "newParameterName": "ucssa_bps"
+                    },
+                    {
+                        "name": "sessionId",
+                        "description": "Unique ID to identify the chat session.  \nString value needs to be enclosed in single quotes",
+                        "in": "query",
+                        "newParameterName": "sessionid"
+                    }
+                ],
+                "requestBody": {}
+            }
+        },
+        {
+            "name": "POST_stopSession",
+            "title": "POST_stopSession",
+            "description": "Stop a conversation session and delete all associated data immediately",
+            "openApiType": {
+                "path": "/stopSession",
+                "method": "post",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "description": "Action parameters"
+                    },
+                    {
+                        "name": "ucssa-userid",
+                        "description": "The user ID of the requesting user",
+                        "in": "header",
+                        "newParameterName": "ucssa_userid"
+                    },
+                    {
+                        "name": "ucssa-username",
+                        "description": "The username of the requesting user",
+                        "in": "header",
+                        "newParameterName": "ucssa_username"
+                    },
+                    {
+                        "name": "ucssa-bps",
+                        "description": "JSON array of business partner IDs, e.g. [\"1113855\"]",
+                        "in": "header",
+                        "newParameterName": "ucssa_bps"
+                    }
+                ],
+                "requestBody": {
+                    "contentType": "application/json"
+                }
+            }
+        },
+        {
+            "name": "POST_uploadFile",
+            "title": "POST_uploadFile",
+            "description": "Uploads a file (PDF, JPG, or PNG) for use in the agent workflow. The file is associated with the specified session.",
+            "openApiType": {
+                "path": "/uploadFile",
+                "method": "post",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "description": "Action parameters"
+                    },
+                    {
+                        "name": "ucssa-userid",
+                        "description": "The user ID of the requesting user",
+                        "in": "header",
+                        "newParameterName": "ucssa_userid"
+                    },
+                    {
+                        "name": "ucssa-username",
+                        "description": "The username of the requesting user",
+                        "in": "header",
+                        "newParameterName": "ucssa_username"
+                    },
+                    {
+                        "name": "ucssa-bps",
+                        "description": "JSON array of business partner IDs, e.g. [\"1113855\"]",
+                        "in": "header",
+                        "newParameterName": "ucssa_bps"
+                    }
+                ],
+                "requestBody": {
+                    "contentType": "application/json"
+                }
+            }
+        }
+    ]
+}

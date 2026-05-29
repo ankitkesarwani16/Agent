@@ -1,0 +1,11 @@
+apiVersion: asset.sap/v1
+kind: Asset
+
+metadata:
+  name: conversation-service-mcp
+  version: 1.0.0
+  description: MCP server for SAP Conversation Service API — provides tools for session management and agent messaging.
+  ordId: customer.mcpbuilder.s4:apiResource:conversation_service_MCP:v1
+  translation: mcp-translation/translation.json
+
+type: mcp-server

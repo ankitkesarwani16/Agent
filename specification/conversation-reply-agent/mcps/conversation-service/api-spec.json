@@ -1,0 +1,692 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Conversation Service",
+    "description": "This is the main service for the application. It manages all conversations with the chatbot, including user questions and the responses generated. Depending on the detected intent, data inquiries may be exchanged with the IS-U system through the MCF interface.",
+    "version": "1.0"
+  },
+  "x-sap-api-type": "ODATAV4",
+  "x-odata-version": "4.01",
+  "x-sap-shortText": "This service handles all conversations with the AI agent.",
+  "servers": [
+    {
+      "url": "https://{Customer Tenant ID}.ucssa.ai.cloud.sap/Conversation",
+      "description": "Hosted server for licensed Customers",
+      "variables": {
+        "Customer Tenant ID": {
+          "default": "123456789"
+        }
+      }
+    }
+  ],
+  "tags": [],
+  "paths": {
+    "/askAgent": {
+      "post": {
+        "summary": "This is the conversation endpoint for the AI agent. A session must be created before sending any messages. See createSession.",
+        "tags": [
+          "Service Operations"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Conversation.Answer"
+                    }
+                  ],
+                  "nullable": true
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/error"
+          }
+        },
+        "requestBody": {
+          "description": "Action parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "sessionId": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The system generates a unique ID identifying the chat session, which must be used in all subsequent requests to maintain context and track the conversation."
+                  },
+                  "input": {
+                    "type": "string",
+                    "nullable": true,
+                    "example": "what was my consumption in 2024",
+                    "description": "The input is the message sent by the user during the chat session, serving as the basis for the AI agentâs reply."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ucssa-userid",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The user ID of the requesting user"
+          },
+          {
+            "name": "ucssa-username",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The username of the requesting user"
+          },
+          {
+            "name": "ucssa-bps",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "JSON array of business partner IDs, e.g. [\"1113855\"]"
+          }
+        ]
+      }
+    },
+    "/createSession": {
+      "post": {
+        "summary": "Creates a new conversation session and returns its unique ID, which must be used with all subsequent conversation requests to maintain context.",
+        "tags": [
+          "Service Operations"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Conversation.SessionContext"
+                    }
+                  ],
+                  "nullable": true,
+                  "description": "Session Context"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/error"
+          }
+        },
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ucssa-userid",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The user ID of the requesting user"
+          },
+          {
+            "name": "ucssa-username",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The username of the requesting user"
+          },
+          {
+            "name": "ucssa-bps",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "JSON array of business partner IDs, e.g. [\"1113855\"]"
+          }
+        ]
+      }
+    },
+    "/getSessionLanguage": {
+      "get": {
+        "summary": "Retrieves the language setting for the specified chat session.",
+        "tags": [
+          "Service Operations"
+        ],
+        "parameters": [
+          {
+            "name": "ucssa-userid",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The user ID of the requesting user"
+          },
+          {
+            "name": "ucssa-username",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The username of the requesting user"
+          },
+          {
+            "name": "ucssa-bps",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "JSON array of business partner IDs, e.g. [\"1113855\"]"
+          },
+          {
+            "description": "Unique ID to identify the chat session.  \nString value needs to be enclosed in single quotes",
+            "required": false,
+            "in": "query",
+            "name": "sessionId",
+            "schema": {
+              "type": "string",
+              "nullable": true,
+              "pattern": "^(null|'([^']|'')*')$",
+              "default": "null"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    },
+    "/stopSession": {
+      "post": {
+        "summary": "Stop a conversation session and delete all associated data immediately",
+        "tags": [
+          "Service Operations"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Conversation.StopSessionResult"
+                    }
+                  ],
+                  "nullable": true,
+                  "description": "Stop session result response"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/error"
+          }
+        },
+        "requestBody": {
+          "description": "Action parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "sessionId": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Unique ID to identify the chat session to be stopped."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ucssa-userid",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The user ID of the requesting user"
+          },
+          {
+            "name": "ucssa-username",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The username of the requesting user"
+          },
+          {
+            "name": "ucssa-bps",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "JSON array of business partner IDs, e.g. [\"1113855\"]"
+          }
+        ]
+      }
+    },
+    "/uploadFile": {
+      "post": {
+        "summary": "Uploads a file (PDF, JPG, or PNG) for use in the agent workflow. The file is associated with the specified session.",
+        "tags": [
+          "Service Operations"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Conversation.UploadResult"
+                    }
+                  ],
+                  "nullable": true,
+                  "description": "Upload result response"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/error"
+          }
+        },
+        "requestBody": {
+          "description": "Action parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "sessionId": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Unique ID to identify the chat session."
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "base64url",
+                    "nullable": true,
+                    "description": "The file to be uploaded. Supported formats: PDF, JPG, PNG."
+                  },
+                  "fileName": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The original filename of the uploaded file."
+                  },
+                  "mimeType": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "The MIME type of the file (e.g., application/pdf, image/jpeg, image/png)."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ucssa-userid",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The user ID of the requesting user"
+          },
+          {
+            "name": "ucssa-username",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The username of the requesting user"
+          },
+          {
+            "name": "ucssa-bps",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "JSON array of business partner IDs, e.g. [\"1113855\"]"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Conversation.Answer": {
+        "title": "Answer",
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "string",
+            "nullable": true,
+            "example": "717cdcc4-53ec-463f-b230-08787a982b94",
+            "description": "Unique ID to identify the chat session."
+          },
+          "message": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Conversation.Message"
+                }
+              ],
+              "nullable": true,
+              "example": "{\"content\": \"Certainly, emma, I have found three premises linked to your name. Kindly choose one to proceed and view your consumption details.\",\n                  \"type\": \"text\"},\n                  {\"content\": \"[{\"standardFlag\":\"\",\"city\":\"Anytown\",\"district\":\"\",\"postalCode\":\"57201\",\"POBoxPostalCode\":\"\",\"POBox\":\"\",\"street\":\"Sunnybrook Street\",\"houseNo\":\"7245\",\"building\":\"\",\"floor\":\"\",\"roomNo\":\"\",\"countryID\":\"DE\",\"countryName\":\"\",\"region\":\"\",\"regionName\":\"\",\"timeZone\":\"CET\",\"taxJurisdictionCode\":\"\",\"languageID\":\"\",\"shortForm\":\"Sunnybrook Street 7245 / 57201 Anytown\",\"premiseTypeID\":\"0003\",\"premiseID\":\"647855\",\"premiseTypeDescription\":\"Single Family Home\"},{\"standardFlag\":\"\",\"city\":\"Anytown\",\"district\":\"\",\"postalCode\":\"57401\",\"POBoxPostalCode\":\"\",\"POBox\":\"\",\"street\":\"Main Street\",\"houseNo\":\"781\",\"building\":\"\",\"floor\":\"\",\"roomNo\":\"\",\"countryID\":\"DE\",\"countryName\":\"\",\"region\":\"\",\"regionName\":\"\",\"timeZone\":\"CET\",\"taxJurisdictionCode\":\"\",\"languageID\":\"\",\"shortForm\":\"Main Street 781 / 57401 Anytown\",\"premiseTypeID\":\"0005\",\"premiseID\":\"647856\",\"premiseTypeDescription\":\"Two-room apartment\"},{\"standardFlag\":\"\",\"city\":\"Anytown\",\"district\":\"\",\"postalCode\":\"57201\",\"POBoxPostalCode\":\"\",\"POBox\":\"\",\"street\":\"Sunnybrook Street\",\"houseNo\":\"7269\",\"building\":\"\",\"floor\":\"\",\"roomNo\":\"\",\"countryID\":\"DE\",\"countryName\":\"\",\"region\":\"11\",\"regionName\":\"\",\"timeZone\":\"CET\",\"taxJurisdictionCode\":\"\",\"languageID\":\"\",\"shortForm\":\"Sunnybrook Street 7269 / 57201 Anytown\",\"premiseTypeID\":\"0006\",\"premiseID\":\"655669\",\"premiseTypeDescription\":\"Three-room apartment\"}]\",\n      \"type\": \"premises\"\n    }"
+            },
+            "description": "The message field contains an array of response messages generated by the agent."
+          }
+        }
+      },
+      "Conversation.Message": {
+        "title": "Message",
+        "type": "object",
+        "properties": {
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Conversation.MessageType",
+                "enum": [
+                  "yearlyConsumption",
+                  "monthlyConsumption",
+                  "premiseSelection",
+                  "meterReading",
+                  "contractSelection",
+                  "contractDetails",
+                  "invoices",
+                  "registerInput",
+                  "userAccount",
+                  "contractAccountSelection",
+                  "text",
+                  "divisionSelection",
+                  "paymentInformation",
+                  "utilitiesProductWithPricesSelection",
+                  "deviceSelection"
+                ]
+              }
+            ],
+            "nullable": true,
+            "description": "It defines the semantic category of the message, indicating the context on which the content is based."
+          },
+          "content": {
+            "type": "string",
+            "nullable": true,
+            "description": "A JSON string containing different properties, which differ depending on the message type."
+          }
+        },
+        "description": "Response message"
+      },
+      "Conversation.MessageType": {
+        "type": "string",
+        "enum": [
+          "yearlyConsumption",
+          "monthlyConsumption",
+          "premiseSelection",
+          "meterReading",
+          "contractSelection",
+          "contractDetails",
+          "invoices",
+          "registerInput",
+          "userAccount",
+          "contractAccountSelection",
+          "text",
+          "divisionSelection",
+          "paymentInformation",
+          "utilitiesProductWithPricesSelection",
+          "deviceSelection"
+        ],
+        "description": "The message type can be one of the listed values. The message type controls which properties are available in the field content. The field content is a json string.",
+        "title": "MessageType"
+      },
+      "Conversation.SessionContext": {
+        "title": "Session Context",
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "string",
+            "example": "717cdcc4-53ec-463f-b230-08787a982b94",
+            "description": "Unique ID to identify the chat session."
+          }
+        }
+      },
+      "Conversation.StopSessionResult": {
+        "title": "StopSessionResult",
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Indicates whether the session was successfully stopped and deleted."
+          },
+          "message": {
+            "type": "string",
+            "nullable": true,
+            "description": "A message describing the result of the operation."
+          },
+          "sessionId": {
+            "type": "string",
+            "nullable": true,
+            "description": "The unique identifier of the stopped session."
+          },
+          "stoppedAt": {
+            "type": "string",
+            "nullable": true,
+            "description": "Timestamp when the session was stopped (ISO 8601 format)."
+          }
+        },
+        "description": "Stop session result response"
+      },
+      "Conversation.UploadResult": {
+        "title": "UploadResult",
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Indicates whether the file upload was successful."
+          },
+          "message": {
+            "type": "string",
+            "nullable": true,
+            "description": "A message describing the result of the upload operation."
+          },
+          "fileId": {
+            "type": "string",
+            "nullable": true,
+            "description": "The unique identifier of the uploaded file."
+          }
+        },
+        "description": "Upload result response"
+      },
+      "count": {
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          }
+        ],
+        "description": "The number of entities in the collection. Available when using the [$count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount) query option."
+      },
+      "error": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "object",
+            "required": [
+              "code",
+              "message"
+            ],
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "target": {
+                "type": "string"
+              },
+              "details": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "code",
+                    "message"
+                  ],
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "target": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "innererror": {
+                "type": "object",
+                "description": "The structure of this object is service-specific"
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "top": {
+        "name": "$top",
+        "in": "query",
+        "description": "Show only the first n items, see [Paging - Top](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptiontop)",
+        "schema": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "example": 50
+      },
+      "skip": {
+        "name": "$skip",
+        "in": "query",
+        "description": "Skip the first n items, see [Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionskip)",
+        "schema": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "count": {
+        "name": "$count",
+        "in": "query",
+        "description": "Include count of items, see [Count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount)",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "search": {
+        "name": "$search",
+        "in": "query",
+        "description": "Search items by search phrases, see [Searching](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionsearch)",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "responses": {
+      "error": {
+        "description": "Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://aiutilitiescssa.authentication.eu10.hana.ondemand.com/oauth2/token?resource=urn:sap:identity:application:provider:name:ucssaTryOutDependency",
+            "scopes": {
+              "chat": "Authorization to converse with the chatbot"
+            }
+          }
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Link to further documentation",
+    "url": "https://help.sap.com/docs/UTILITIES_CUSTOMER_SELF_SERVICE_AGENT/5c7712a1b6e14a2c89a190a40ef35f55/26dcd7aec96a4d66905bfb7b7feaefcf.html"
+  },
+  "x-sap-compliance-level": "sap:base:v1",
+  "security": [
+    {
+      "OAuth2": []
+    }
+  ]
+}

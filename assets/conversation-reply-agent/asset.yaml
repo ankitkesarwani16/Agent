@@ -1,0 +1,40 @@
+apiVersion: asset.sap/v1
+kind: Asset
+
+metadata:
+  name: conversation-reply-agent
+  version: 1.0.0
+  description: AI agent that ingests conversations, understands intent, retrieves grounding context, and generates replies via SAP AI Core.
+
+type: agent
+
+container:
+  buildPath: .
+  port: 5000
+
+requires:
+  - name: conversation-service-mcp
+    kind: mcp-server
+    ordId: customer.mcpbuilder.s4:apiResource:conversation_service_MCP:v1
+  - name: grounding-service-mcp
+    kind: mcp-server
+    ordId: customer.mcpbuilder.s4:apiResource:grounding_service_MCP:v1
+
+probes:
+  startup:
+    path: /.well-known/agent.json
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 18
+  liveness:
+    path: /.well-known/agent.json
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readiness:
+    path: /.well-known/agent.json
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3

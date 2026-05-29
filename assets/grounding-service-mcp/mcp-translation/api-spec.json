@@ -1,0 +1,419 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Grounding Service",
+    "description": "This service allows you to upload PDF files to generate and store semantic embeddings, enabling context-aware, and data-grounded AI responses. It also provides functionality to delete stored embeddings, ensuring content relevance and data manageability. It enhances the interaction by making the content of the PDF more accessible to the agent. The service is vital in ensuring that the system can effectively understand and address user needs.",
+    "version": "1.0"
+  },
+  "x-sap-api-type": "ODATAV4",
+  "x-odata-version": "4.01",
+  "x-sap-shortText": "The Grounding Service enables the creation and deletion of embeddings from PDF documents. These embeddings help agents respond to relevant user intents.",
+  "servers": [
+    {
+      "url": "https://{Customer Tenant ID}.ucssa.ai.cloud.sap/grounding",
+      "description": "Hosted server for licensed Customers",
+      "variables": {
+        "Customer Tenant ID": {
+          "default": "123456789"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "Pdf Files",
+      "description": "PDF Files"
+    }
+  ],
+  "paths": {
+    "/PdfFiles": {
+      "post": {
+        "summary": "Creates a media resource for a PDF file.",
+        "tags": [
+          "Pdf Files"
+        ],
+        "requestBody": {
+          "description": "PDF Files",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroundingService.PdfFiles-create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created pdf file",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GroundingService.PdfFiles"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Duplicate Resource: a resource with name \"...\" and category \"...\" already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Creates a media resource without content. The PUT request then sends the data."
+      }
+    },
+    "/PdfFiles(name='{name}',category='{category}')": {
+      "parameters": [
+        {
+          "description": "Source of the data, such as the filename of the PDF being uploaded.",
+          "in": "path",
+          "name": "name",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 30,
+            "example": "CompanyProfile.pdf"
+          }
+        },
+        {
+          "description": "Target category for the embeddings, indicating which agent the generated embeddings correspond to.",
+          "in": "path",
+          "name": "category",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "enum": [
+              "Company"
+            ]
+          }
+        }
+      ],
+      "put": {
+        "summary": "Sends the content of a PDF file to an existing media resource.",
+        "tags": [
+          "Pdf Files"
+        ],
+        "requestBody": {
+          "description": "PDF Files",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroundingService.PdfFiles-update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/error"
+          }
+        },
+        "description": "Update an existing entity with the content of a text PDF file. Note that images and tables are not supported. Once completed, this update triggers the creation of embeddings for the file. These are saved in another entity, after which the current entity is deleted."
+      }
+    },
+    "/remove": {
+      "post": {
+        "summary": "Remove the embeddings for the given source and category.",
+        "tags": [
+          "Service Operations"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "string",
+                      "nullable": true,
+                      "example": "12 Embeddings for File openUtil.pdf were removed from DB."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "description": "Action parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 90,
+                    "example": "CompanyProfile.pdf",
+                    "description": "Name of the data source (such as the file name)."
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "Company"
+                    ],
+                    "description": "Target Category for the Embeddings. The target category corresponds to an agent."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GroundingService.PdfFiles": {
+        "title": "PDF Files",
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04.0000000Z",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "maxLength": 255,
+            "nullable": true,
+            "description": "{i18n>UserID.Description}"
+          },
+          "modifiedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04.0000000Z",
+            "nullable": true
+          },
+          "modifiedBy": {
+            "type": "string",
+            "maxLength": 255,
+            "nullable": true,
+            "description": "{i18n>UserID.Description}"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 30,
+            "example": "CompanyProfile.pdf",
+            "description": "Source of the data, such as the filename of the PDF being uploaded."
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "Company"
+            ],
+            "description": "Target category for the embeddings, indicating which agent the generated embeddings correspond to."
+          },
+          "pdfFile": {
+            "type": "string",
+            "format": "base64url",
+            "nullable": true,
+            "example": "For the PUT request only: set a file for content type application/pdf in your request body: body:file {file: @file(ProfileOpenUtil.pdf) @contentType(application/pdf)}",
+            "description": "property pdfFile"
+          }
+        },
+        "description": "Temporary saving of PDF files on the database, using CAP Media saving capability."
+      },
+      "GroundingService.PdfFiles-create": {
+        "title": "PDF Files (for create)",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 30,
+            "example": "CompanyProfile.pdf",
+            "description": "Source of the data, such as the filename of the PDF being uploaded."
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "Company"
+            ],
+            "description": "Target category for the embeddings, indicating which agent the generated embeddings correspond to."
+          },
+          "pdfFile": {
+            "type": "string",
+            "format": "base64url",
+            "nullable": true,
+            "example": "For the PUT request only: set a file for content type application/pdf in your request body: body:file {file: @file(ProfileOpenUtil.pdf) @contentType(application/pdf)}",
+            "description": "property pdfFile"
+          }
+        },
+        "required": [
+          "name",
+          "category"
+        ],
+        "description": "Temporary saving of PDF files on the database, using CAP Media saving capability."
+      },
+      "GroundingService.PdfFiles-update": {
+        "title": "PDF Files (for update)",
+        "type": "object",
+        "properties": {
+          "pdfFile": {
+            "type": "string",
+            "format": "base64url",
+            "nullable": true,
+            "example": "For the PUT request only: set a file for content type application/pdf in your request body: body:file {file: @file(ProfileOpenUtil.pdf) @contentType(application/pdf)}",
+            "description": "property pdfFile"
+          }
+        },
+        "description": "Temporary saving of PDF files on the database, using CAP Media saving capability."
+      },
+      "count": {
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          }
+        ],
+        "description": "The number of entities in the collection. Available when using the [$count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount) query option."
+      },
+      "error": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "object",
+            "required": [
+              "code",
+              "message"
+            ],
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "target": {
+                "type": "string"
+              },
+              "details": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "code",
+                    "message"
+                  ],
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "target": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "innererror": {
+                "type": "object",
+                "description": "The structure of this object is service-specific"
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "top": {
+        "name": "$top",
+        "in": "query",
+        "description": "Show only the first n items, see [Paging - Top](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptiontop)",
+        "schema": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "example": 50
+      },
+      "skip": {
+        "name": "$skip",
+        "in": "query",
+        "description": "Skip the first n items, see [Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionskip)",
+        "schema": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "count": {
+        "name": "$count",
+        "in": "query",
+        "description": "Include count of items, see [Count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount)",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "search": {
+        "name": "$search",
+        "in": "query",
+        "description": "Search items by search phrases, see [Searching](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionsearch)",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "responses": {
+      "error": {
+        "description": "Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://aiutilitiescssa.authentication.eu10.hana.ondemand.com/oauth2/token?resource=urn:sap:identity:application:provider:name:ucssaTryOutDependency",
+            "scopes": {}
+          }
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Link to further documentation",
+    "url": "https://help.sap.com/docs/UTILITIES_CUSTOMER_SELF_SERVICE_AGENT/5c7712a1b6e14a2c89a190a40ef35f55/26dcd7aec96a4d66905bfb7b7feaefcf.html"
+  },
+  "x-sap-compliance-level": "sap:base:v1",
+  "security": [
+    {
+      "OAuth2": []
+    }
+  ]
+}

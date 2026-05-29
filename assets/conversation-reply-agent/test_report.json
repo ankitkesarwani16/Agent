@@ -1,0 +1,274 @@
+{
+  "summary": {
+    "total": 46,
+    "passed": 46,
+    "failed": 0,
+    "score": 100.0
+  },
+  "sections": [
+    {
+      "name": "Structure Tests",
+      "marker": "structure",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "score": 100.0,
+      "tests": [
+        {
+          "name": "test_agent_directory_exists",
+          "outcome": "passed",
+          "duration": 0.0002
+        },
+        {
+          "name": "test_app_directory_exists",
+          "outcome": "passed",
+          "duration": 0.0002
+        },
+        {
+          "name": "test_requirements_txt_exists",
+          "outcome": "passed",
+          "duration": 0.0002
+        }
+      ]
+    },
+    {
+      "name": "Server Tests",
+      "marker": "server",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "score": 100.0,
+      "tests": [
+        {
+          "name": "test_server_starts",
+          "outcome": "passed",
+          "duration": 0.0004
+        },
+        {
+          "name": "test_agent_card_endpoint",
+          "outcome": "passed",
+          "duration": 0.0262
+        }
+      ]
+    },
+    {
+      "name": "Agent Tests",
+      "marker": "agent_tests",
+      "total": 41,
+      "passed": 41,
+      "failed": 0,
+      "skipped": 0,
+      "score": 100.0,
+      "tests": [
+        {
+          "name": "test_check_escalation_true",
+          "outcome": "passed",
+          "duration": 3.1794
+        },
+        {
+          "name": "test_check_escalation_false",
+          "outcome": "passed",
+          "duration": 0.0004
+        },
+        {
+          "name": "test_touch_evicts_expired_thread",
+          "outcome": "passed",
+          "duration": 0.0009
+        },
+        {
+          "name": "test_invoke_returns_input_required_status",
+          "outcome": "passed",
+          "duration": 0.001
+        },
+        {
+          "name": "test_invoke_returns_error_on_empty_stream",
+          "outcome": "passed",
+          "duration": 0.0006
+        },
+        {
+          "name": "test_m2_achieved_for_normal_message",
+          "outcome": "passed",
+          "duration": 0.0031
+        },
+        {
+          "name": "test_m2_missed_for_escalation_keyword",
+          "outcome": "passed",
+          "duration": 0.0016
+        },
+        {
+          "name": "test_escalation_keywords_detected",
+          "outcome": "passed",
+          "duration": 0.0013
+        },
+        {
+          "name": "test_m5_achieved_after_successful_reply",
+          "outcome": "passed",
+          "duration": 0.0019
+        },
+        {
+          "name": "test_stream_yields_complete_status",
+          "outcome": "passed",
+          "duration": 0.0008
+        },
+        {
+          "name": "test_invoke_returns_completed_status",
+          "outcome": "passed",
+          "duration": 0.0008
+        },
+        {
+          "name": "test_m4_achieved_on_valid_llm_response",
+          "outcome": "passed",
+          "duration": 0.0022
+        },
+        {
+          "name": "test_m4_missed_on_empty_llm_response",
+          "outcome": "passed",
+          "duration": 0.002
+        },
+        {
+          "name": "test_m4_missed_on_llm_exception",
+          "outcome": "passed",
+          "duration": 0.0024
+        },
+        {
+          "name": "test_m1_achieved_on_normal_input",
+          "outcome": "passed",
+          "duration": 0.0018
+        },
+        {
+          "name": "test_m1_with_tools",
+          "outcome": "passed",
+          "duration": 0.0039
+        },
+        {
+          "name": "test_end_to_end_normal_conversation",
+          "outcome": "passed",
+          "duration": 0.0023
+        },
+        {
+          "name": "test_end_to_end_escalation_flow",
+          "outcome": "passed",
+          "duration": 0.0014
+        },
+        {
+          "name": "test_end_to_end_with_mcp_tools",
+          "outcome": "passed",
+          "duration": 0.0037
+        },
+        {
+          "name": "test_m3_achieved_on_successful_run",
+          "outcome": "passed",
+          "duration": 0.0046
+        },
+        {
+          "name": "test_m3_skipped_for_escalation",
+          "outcome": "passed",
+          "duration": 0.0012
+        },
+        {
+          "name": "test_enhance_tool_description_with_none",
+          "outcome": "passed",
+          "duration": 0.0007
+        },
+        {
+          "name": "test_enhance_tool_description_with_valid_tool",
+          "outcome": "passed",
+          "duration": 0.0003
+        },
+        {
+          "name": "test_enhance_tool_name_basic",
+          "outcome": "passed",
+          "duration": 0.0004
+        },
+        {
+          "name": "test_is_retryable_error_generic",
+          "outcome": "passed",
+          "duration": 0.0002
+        },
+        {
+          "name": "test_is_retryable_error_http_4xx",
+          "outcome": "passed",
+          "duration": 0.0004
+        },
+        {
+          "name": "test_is_retryable_error_http_5xx",
+          "outcome": "passed",
+          "duration": 0.0004
+        },
+        {
+          "name": "test_build_mock_tools_loads_mcp_mock_json",
+          "outcome": "passed",
+          "duration": 1.0337
+        },
+        {
+          "name": "test_build_mock_tools_returns_structured_tools",
+          "outcome": "passed",
+          "duration": 0.0061
+        },
+        {
+          "name": "test_build_mock_tools_missing_file",
+          "outcome": "passed",
+          "duration": 0.0002
+        },
+        {
+          "name": "test_build_mock_tools_invalid_json",
+          "outcome": "passed",
+          "duration": 0.0023
+        },
+        {
+          "name": "test_get_mcp_tools_in_ibd_testing_mode",
+          "outcome": "passed",
+          "duration": 0.0068
+        },
+        {
+          "name": "test_get_mcp_tools_returns_cached_result",
+          "outcome": "passed",
+          "duration": 0.0117
+        },
+        {
+          "name": "test_mock_tool_returns_mock_response",
+          "outcome": "passed",
+          "duration": 0.0094
+        },
+        {
+          "name": "test_convert_mcp_tool_none_raises",
+          "outcome": "passed",
+          "duration": 0.0007
+        },
+        {
+          "name": "test_convert_mcp_tool_valid",
+          "outcome": "passed",
+          "duration": 0.0013
+        },
+        {
+          "name": "test_get_mcp_tools_production_path_mocked",
+          "outcome": "passed",
+          "duration": 0.0034
+        },
+        {
+          "name": "test_get_mcp_tools_production_path_empty",
+          "outcome": "passed",
+          "duration": 0.0011
+        },
+        {
+          "name": "test_get_mcp_tools_production_path_exception",
+          "outcome": "passed",
+          "duration": 0.0019
+        },
+        {
+          "name": "test_get_mcp_tools_stale_cache_on_failure",
+          "outcome": "passed",
+          "duration": 0.0036
+        },
+        {
+          "name": "test_build_mock_tools_integer_field",
+          "outcome": "passed",
+          "duration": 0.0013
+        }
+      ],
+      "coverage": 84.19
+    }
+  ]
+}

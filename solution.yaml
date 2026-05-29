@@ -1,0 +1,12 @@
+apiVersion: solution.sap/v1
+kind: Solution
+
+metadata:
+  name: conversation-reply-agent-f3111
+  version: 1.0.0
+  description: AI agent that reads incoming conversations and generates contextually appropriate replies using SAP AI Core.
+
+assets:
+  - ref: ./assets/conversation-reply-agent/asset.yaml
+  - ref: ./assets/conversation-service-mcp/asset.yaml
+  - ref: ./assets/grounding-service-mcp/asset.yaml

@@ -1,0 +1,11 @@
+apiVersion: asset.sap/v1
+kind: Asset
+
+metadata:
+  name: grounding-service-mcp
+  version: 1.0.0
+  description: MCP server for SAP Grounding Service API - provides tools for knowledge base search and PDF document management.
+  ordId: customer.mcpbuilder.s4:apiResource:grounding_service_MCP:v1
+  translation: mcp-translation/translation.json
+
+type: mcp-server

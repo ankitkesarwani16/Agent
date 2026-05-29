@@ -1,0 +1,184 @@
+{
+  "servers": {
+    "conversation-service": {
+      "mcp_server_name": "sap.mcp/conversation_service",
+      "description": "MCP server for the SAP Conversation Service — session management and agent messaging.",
+      "tools": {
+        "POST_createSession": {
+          "description": "Creates a new conversation session and returns its unique ID.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "body": {"type": "object", "description": "Session creation parameters"},
+              "ucssa_userid": {"type": "string", "description": "The user ID of the requesting user"},
+              "ucssa_username": {"type": "string", "description": "The username of the requesting user"},
+              "ucssa_bps": {"type": "string", "description": "JSON array of business partner IDs"}
+            },
+            "required": []
+          },
+          "mock_response": {
+            "sessionId": "sess-mock-12345-abcde",
+            "status": "created",
+            "createdAt": "2026-05-26T10:00:00Z"
+          }
+        },
+        "POST_askAgent": {
+          "description": "Send a message to the conversation agent and receive a reply.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "body": {"type": "object", "description": "Message payload with sessionId and message text"},
+              "ucssa_userid": {"type": "string", "description": "The user ID of the requesting user"},
+              "ucssa_username": {"type": "string", "description": "The username of the requesting user"},
+              "ucssa_bps": {"type": "string", "description": "JSON array of business partner IDs"}
+            },
+            "required": []
+          },
+          "mock_response": {
+            "sessionId": "sess-mock-12345-abcde",
+            "message": "Thank you for contacting us. Your order #ORD-9901 is currently being processed and will be shipped within 2 business days.",
+            "messageId": "msg-mock-99001",
+            "timestamp": "2026-05-26T10:01:00Z"
+          }
+        },
+        "GET_getSessionLanguage": {
+          "description": "Retrieves the language setting for the specified chat session.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "ucssa_userid": {"type": "string", "description": "The user ID of the requesting user"},
+              "ucssa_username": {"type": "string", "description": "The username of the requesting user"},
+              "ucssa_bps": {"type": "string", "description": "JSON array of business partner IDs"},
+              "sessionid": {"type": "string", "description": "Unique ID to identify the chat session"}
+            },
+            "required": []
+          },
+          "mock_response": {
+            "sessionId": "sess-mock-12345-abcde",
+            "language": "en",
+            "locale": "en-US"
+          }
+        },
+        "POST_stopSession": {
+          "description": "Stop a conversation session and delete all associated data immediately.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "body": {"type": "object", "description": "Action parameters including sessionId"},
+              "ucssa_userid": {"type": "string", "description": "The user ID of the requesting user"},
+              "ucssa_username": {"type": "string", "description": "The username of the requesting user"},
+              "ucssa_bps": {"type": "string", "description": "JSON array of business partner IDs"}
+            },
+            "required": []
+          },
+          "mock_response": {
+            "sessionId": "sess-mock-12345-abcde",
+            "status": "stopped",
+            "stoppedAt": "2026-05-26T10:05:00Z"
+          }
+        },
+        "POST_uploadFile": {
+          "description": "Uploads a file (PDF, JPG, or PNG) for use in the agent workflow.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "body": {"type": "object", "description": "File upload parameters"},
+              "ucssa_userid": {"type": "string", "description": "The user ID of the requesting user"},
+              "ucssa_username": {"type": "string", "description": "The username of the requesting user"},
+              "ucssa_bps": {"type": "string", "description": "JSON array of business partner IDs"}
+            },
+            "required": []
+          },
+          "mock_response": {
+            "fileId": "file-mock-77001",
+            "sessionId": "sess-mock-12345-abcde",
+            "fileName": "knowledge-base.pdf",
+            "status": "uploaded",
+            "uploadedAt": "2026-05-26T10:00:30Z"
+          }
+        }
+      }
+    },
+    "grounding-service": {
+      "mcp_server_name": "sap.mcp/grounding_service",
+      "description": "MCP server for the SAP Grounding Service — knowledge base search and PDF document management.",
+      "tools": {
+        "POST_PdfFiles": {
+          "description": "Creates a media resource entry for a PDF file before uploading content.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "body": {
+                "type": "object",
+                "description": "PDF file metadata",
+                "properties": {
+                  "name": {"type": "string", "description": "Filename of the PDF"},
+                  "category": {"type": "string", "description": "Target category for embeddings"}
+                }
+              }
+            },
+            "required": []
+          },
+          "mock_response": {
+            "name": "product-faq.pdf",
+            "category": "conversation-reply-agent",
+            "status": "created"
+          }
+        },
+        "PUT_PdfFiles_name__name__category__category__": {
+          "description": "Upload and index a PDF file for knowledge retrieval. Triggers embedding creation.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "body": {"type": "string", "description": "PDF file binary content"},
+              "name": {"type": "string", "description": "Source filename of the PDF being uploaded"},
+              "category": {"type": "string", "description": "Target category for the embeddings"}
+            },
+            "required": ["name", "category"]
+          },
+          "mock_response": {
+            "name": "product-faq.pdf",
+            "category": "conversation-reply-agent",
+            "embeddingsCreated": true,
+            "status": "indexed"
+          }
+        },
+        "POST_remove": {
+          "description": "Remove the embeddings for the given source and category.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "body": {
+                "type": "object",
+                "description": "Removal parameters",
+                "properties": {
+                  "name": {"type": "string", "description": "Name of the source to remove"},
+                  "category": {"type": "string", "description": "Category of the embeddings to remove"}
+                }
+              }
+            },
+            "required": []
+          },
+          "mock_response": {
+            "name": "product-faq.pdf",
+            "category": "conversation-reply-agent",
+            "status": "removed"
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "created_for_agent": "conversation-reply-agent",
+    "mock_mode": true,
+    "deterministic": true,
+    "total_servers": 2,
+    "total_tools": 8,
+    "generated_from": [
+      "assets/conversation-service-mcp/mcp-translation/translation.json",
+      "assets/grounding-service-mcp/mcp-translation/translation.json"
+    ],
+    "generation_date": "2026-05-26"
+  }
+}

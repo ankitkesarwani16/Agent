@@ -1,0 +1,375 @@
+{
+  "_meta": {
+    "sap.ord/ordId": {
+      "ordId": "customer.mcpbuilder.s4util:apiResource:GroundingService_MCP:v1"
+    },
+    "sap.mcpbuilder/translation": {
+      "ordId": "customer.mcpbuilder.s4util:apiResource:GroundingService_MCP:v1"
+    },
+    "sap.ord/originalApiResourceOrdId": "sap.s4.util:apiResource:GroundingService:v1"
+  },
+  "$schema": "https://pages.github.tools.sap/CPA/mcp-protocol/spec-v1/mcp-server-card-spec.schema.json",
+  "remotes": [],
+  "capabilities": {
+    "tools": {},
+    "prompts": {}
+  },
+  "supportedProtocolVersions": [
+    "2025-11-25"
+  ],
+  "name": "sap.mcp/grounding_service",
+  "title": "grounding_service",
+  "version": "1.0.0",
+  "description": "MCP server for the grounding_service service.",
+  "tools": [
+    {
+      "name": "POST_PdfFiles",
+      "title": "POST_PdfFiles",
+      "description": "Creates a media resource without content. The PUT request then sends the data.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "body"
+        ],
+        "properties": {
+          "body": {
+            "type": "object",
+            "description": "PDF Files",
+            "title": "PDF Files (for create)",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Source of the data, such as the filename of the PDF being uploaded.",
+                "example": "CompanyProfile.pdf"
+              },
+              "category": {
+                "type": "string",
+                "description": "Target category for the embeddings, indicating which agent the generated embeddings correspond to.",
+                "enum": [
+                  "Company"
+                ]
+              },
+              "pdfFile": {
+                "type": "string",
+                "description": "property pdfFile",
+                "example": "For the PUT request only: set a file for content type application/pdf in your request body: body:file {file: @file(ProfileOpenUtil.pdf) @contentType(application/pdf)}",
+                "format": "base64url"
+              }
+            },
+            "required": [
+              "category",
+              "name"
+            ]
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "anyOf": [
+              {
+                "type": "object",
+                "description": "Created pdf file (HTTP 201)",
+                "title": "PDF Files",
+                "properties": {
+                  "createdAt": {
+                    "type": "string",
+                    "example": 1492098664,
+                    "format": "date-time"
+                  },
+                  "createdBy": {
+                    "type": "string",
+                    "description": "{i18n>UserID.Description}"
+                  },
+                  "modifiedAt": {
+                    "type": "string",
+                    "example": 1492098664,
+                    "format": "date-time"
+                  },
+                  "modifiedBy": {
+                    "type": "string",
+                    "description": "{i18n>UserID.Description}"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Source of the data, such as the filename of the PDF being uploaded.",
+                    "example": "CompanyProfile.pdf"
+                  },
+                  "category": {
+                    "type": "string",
+                    "description": "Target category for the embeddings, indicating which agent the generated embeddings correspond to.",
+                    "enum": [
+                      "Company"
+                    ]
+                  },
+                  "pdfFile": {
+                    "type": "string",
+                    "description": "property pdfFile",
+                    "example": "For the PUT request only: set a file for content type application/pdf in your request body: body:file {file: @file(ProfileOpenUtil.pdf) @contentType(application/pdf)}",
+                    "format": "base64url"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string"
+                      },
+                      "target": {
+                        "type": "string"
+                      },
+                      "details": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "target": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "message"
+                          ]
+                        }
+                      },
+                      "innererror": {
+                        "type": "object",
+                        "description": "The structure of this object is service-specific"
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "message"
+                    ]
+                  }
+                },
+                "required": [
+                  "error"
+                ],
+                "description": "Duplicate Resource: a resource with name \"...\" and category \"...\" already exists (HTTP 409)"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "PUT_PdfFiles_name__name__category__category__",
+      "title": "PUT_PdfFiles_name__name__category__category__",
+      "description": "Update an existing entity with the content of a text PDF file. Note that images and tables are not supported. Once completed, this update triggers the creation of embeddings for the file. These are saved in another entity, after which the current entity is deleted.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "body",
+          "name",
+          "category"
+        ],
+        "properties": {
+          "body": {
+            "type": "object",
+            "description": "PDF Files",
+            "title": "PDF Files (for update)",
+            "properties": {
+              "pdfFile": {
+                "type": "string",
+                "description": "property pdfFile",
+                "example": "For the PUT request only: set a file for content type application/pdf in your request body: body:file {file: @file(ProfileOpenUtil.pdf) @contentType(application/pdf)}",
+                "format": "base64url"
+              }
+            }
+          },
+          "name": {
+            "type": "string",
+            "description": "Source of the data, such as the filename of the PDF being uploaded.",
+            "example": "CompanyProfile.pdf"
+          },
+          "category": {
+            "type": "string",
+            "description": "Target category for the embeddings, indicating which agent the generated embeddings correspond to.",
+            "enum": [
+              "Company"
+            ]
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string"
+                      },
+                      "target": {
+                        "type": "string"
+                      },
+                      "details": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "target": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "message"
+                          ]
+                        }
+                      },
+                      "innererror": {
+                        "type": "object",
+                        "description": "The structure of this object is service-specific"
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "message"
+                    ]
+                  }
+                },
+                "required": [
+                  "error"
+                ],
+                "description": "Error (HTTP 4XX)"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "POST_remove",
+      "title": "POST_remove",
+      "description": "Remove the embeddings for the given source and category.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of the data source (such as the file name).",
+                "example": "CompanyProfile.pdf"
+              },
+              "category": {
+                "type": "string",
+                "description": "Target Category for the Embeddings. The target category corresponds to an agent.",
+                "enum": [
+                  "Company"
+                ]
+              }
+            },
+            "description": "Action parameters"
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "example": "12 Embeddings for File openUtil.pdf were removed from DB."
+                  }
+                },
+                "description": "Success (HTTP 200)"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string"
+                      },
+                      "target": {
+                        "type": "string"
+                      },
+                      "details": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "target": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "message"
+                          ]
+                        }
+                      },
+                      "innererror": {
+                        "type": "object",
+                        "description": "The structure of this object is service-specific"
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "message"
+                    ]
+                  }
+                },
+                "required": [
+                  "error"
+                ],
+                "description": "Forbidden (HTTP 403)"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

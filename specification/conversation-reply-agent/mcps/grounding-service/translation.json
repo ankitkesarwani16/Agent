@@ -1,0 +1,81 @@
+{
+  "mcpTranslationVersion": "0.1",
+  "target": {
+    "ordId": "sap.s4.util:apiResource:GroundingService:v1",
+    "type": "openapi-v3"
+  },
+  "serverInfo": {
+    "name": "sap.mcp/grounding_service",
+    "title": "grounding_service",
+    "version": "1.0.0",
+    "description": "MCP server for the grounding_service service."
+  },
+  "tools": [
+    {
+      "name": "POST_PdfFiles",
+      "title": "POST_PdfFiles",
+      "description": "Creates a media resource without content. The PUT request then sends the data.",
+      "openApiType": {
+        "path": "/PdfFiles",
+        "method": "post",
+        "parameters": [
+          {
+            "name": "body",
+            "description": "PDF Files"
+          }
+        ],
+        "requestBody": {
+          "contentType": "application/json"
+        }
+      }
+    },
+    {
+      "name": "PUT_PdfFiles_name__name__category__category__",
+      "title": "PUT_PdfFiles_name__name__category__category__",
+      "description": "Update an existing entity with the content of a text PDF file. Note that images and tables are not supported. Once completed, this update triggers the creation of embeddings for the file. These are saved in another entity, after which the current entity is deleted.",
+      "openApiType": {
+        "path": "/PdfFiles(name='{name}',category='{category}')",
+        "method": "put",
+        "parameters": [
+          {
+            "name": "body",
+            "description": "PDF Files"
+          },
+          {
+            "name": "name",
+            "description": "Source of the data, such as the filename of the PDF being uploaded.",
+            "in": "path",
+            "newParameterName": "name"
+          },
+          {
+            "name": "category",
+            "description": "Target category for the embeddings, indicating which agent the generated embeddings correspond to.",
+            "in": "path",
+            "newParameterName": "category"
+          }
+        ],
+        "requestBody": {
+          "contentType": "application/json"
+        }
+      }
+    },
+    {
+      "name": "POST_remove",
+      "title": "POST_remove",
+      "description": "Remove the embeddings for the given source and category.",
+      "openApiType": {
+        "path": "/remove",
+        "method": "post",
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Action parameters"
+          }
+        ],
+        "requestBody": {
+          "contentType": "application/json"
+        }
+      }
+    }
+  ]
+}
